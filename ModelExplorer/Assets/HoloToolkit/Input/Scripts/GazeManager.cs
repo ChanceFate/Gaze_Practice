@@ -48,9 +48,11 @@ public class GazeManager : Singleton<GazeManager>
     private void Update()
     {
         // 2.a: Assign Camera's main transform position to gazeOrigin.
-        
+        gazeOrigin = Camera.main.transform.position;
+
 
         // 2.a: Assign Camera's main transform forward to gazeDirection.
+        gazeDirection = Camera.main.transform.forward;
         
 
         // 3.a: Using gazeStabilizer, call function UpdateHeadStability.
@@ -72,27 +74,29 @@ public class GazeManager : Singleton<GazeManager>
         /* TODO: DEVELOPER CODING EXERCISE 2.a */
 
         // 2.a: Create a variable hitInfo of type RaycastHit.
-        
+        RaycastHit hitInfo;
+
 
         // 2.a: Perform a Unity Physics Raycast.
         // Collect return value in public property Hit.
         // Pass in origin as gazeOrigin and direction as gazeDirection.
         // Collect the information in hitInfo.
         // Pass in MaxGazeDistance and RaycastLayerMask.
-        
+        Hit = Physics.Raycast(gazeOrigin, gazeDirection, out hitInfo,MaxGazeDistance,RaycastLayerMask);
 
         // 2.a: Assign hitInfo variable to the HitInfo public property 
         // so other classes can access it.
-        
+        HitInfo = hitInfo;
 
         if (Hit)
         {
             // If raycast hit a hologram...
 
             // 2.a: Assign property Position to be the hitInfo point.
-            
+            Position = hitInfo.point;
+
             // 2.a: Assign property Normal to be the hitInfo normal.
-            
+            Normal = hitInfo.normal;
         }
         else
         {
@@ -101,9 +105,10 @@ public class GazeManager : Singleton<GazeManager>
             // Save defaults ...
 
             // 2.a: Assign Position to be gazeOrigin plus MaxGazeDistance times gazeDirection.
-            
+            Position = gazeOrigin + MaxGazeDistance * gazeDirection;
+
             // 2.a: Assign Normal to be the user's gazeDirection.
-            
+            Normal = gazeDirection;
         }
     }
 }
